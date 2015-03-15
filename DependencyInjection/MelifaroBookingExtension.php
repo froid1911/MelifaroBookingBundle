@@ -28,9 +28,7 @@ class MelifaroBookingExtension extends Extension
         $container->setParameter(
             'melifaro_booking.entity_class_car',
             $config['entity_class_car']
-        );
-
-        $container->setParameter(
+        )->setParameter(
             'melifaro_booking.entity_class_bike',
             $config['entity_class_bike']
         );

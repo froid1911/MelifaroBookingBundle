@@ -2,10 +2,10 @@ parameters:
   melifaro_booking.entity_class: ~
 
 services:
-  booker.car:
+  booker.bike:
     class: Melifaro\BookingBundle\Helper\Booker
     arguments: [%melifaro_booking.entity_class_bike%, @doctrine]
-  booker.bike:
+  booker.car:
       class: Melifaro\BookingBundle\Helper\Booker
       arguments: [%melifaro_booking.entity_class_car%, @doctrine]
 
