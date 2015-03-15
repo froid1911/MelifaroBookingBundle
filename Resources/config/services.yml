@@ -2,9 +2,12 @@ parameters:
   melifaro_booking.entity_class: ~
 
 services:
-  booker:
+  booker.car:
     class: Melifaro\BookingBundle\Helper\Booker
-    arguments: [%melifaro_booking.entity_class%, @doctrine]
+    arguments: [%melifaro_booking.entity_class_bike%, @doctrine]
+  booker.bike:
+      class: Melifaro\BookingBundle\Helper\Booker
+      arguments: [%melifaro_booking.entity_class_car%, @doctrine]
 
   booking_calendar:
     class: Melifaro\BookingBundle\Twig\CalendarExtension

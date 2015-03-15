@@ -20,9 +20,12 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $treeBuilder->root('melifaro_booking')
             ->children()
-                ->scalarNode('entity_class')
+            ->scalarNode('entity_class_bike')
                 ->isRequired()
                 ->end()
+            ->scalarNode('entity_class_car')
+            ->isRequired()
+            ->end()
             ->end();
 
         // Here you should define the parameters that are allowed to
