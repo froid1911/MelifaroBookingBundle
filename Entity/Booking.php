@@ -15,14 +15,14 @@ abstract class Booking
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="start_date", type="date")
+     * @ORM\Column(name="start_date", type="datetime")
      */
     protected $start;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="end_date", type="date")
+     * @ORM\Column(name="end_date", type="datetime")
      */
     protected $end;
 
@@ -34,6 +34,16 @@ abstract class Booking
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get start
+     *
+     * @return \DateTime
+     */
+    public function getStart()
+    {
+        return $this->start;
     }
 
     /**
@@ -50,13 +60,13 @@ abstract class Booking
     }
 
     /**
-     * Get start
+     * Get end
      *
      * @return \DateTime
      */
-    public function getStart()
+    public function getEnd()
     {
-        return $this->start;
+        return $this->end;
     }
 
     /**
@@ -70,16 +80,6 @@ abstract class Booking
         $this->end = $end;
 
         return $this;
-    }
-
-    /**
-     * Get end
-     *
-     * @return \DateTime
-     */
-    public function getEnd()
-    {
-        return $this->end;
     }
 
     abstract public function getItem();
