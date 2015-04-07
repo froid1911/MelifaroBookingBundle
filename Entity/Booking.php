@@ -30,7 +30,7 @@ abstract class Booking
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="storno", type="datetime")
+     * @ORM\Column(name="storno", type="datetime", nullable=true)
      */
     protected $storno;
 
