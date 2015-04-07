@@ -44,10 +44,9 @@ class Booker
         $results = $qb->select('b.id')
             ->where('b.start <= :date AND b.end >= :date')
             ->andWhere('b.item = :item')
-            ->andWhere('b.storno = :null')
+            ->andWhere('b.storno is NULL')
             ->setParameter('item', $item)
             ->setParameter('date', $date)
-            ->setParameter('null', null)
             ->getQuery()
             ->getResult();
 
@@ -73,12 +72,11 @@ class Booker
                 $join['alias'].'.start >= :start AND '.$join['alias'].'.end <= :end AND '.
                 $join['alias'].'.end >= :start'
             )
-            ->andWhere($join['alias'].'.storno = :null')
+            ->andWhere($join['alias'].'.storno is NULL')
 
             ->setParameters(array(
                 'start'=> $start,
                 'end'  => $end,
-                'null' => null
             ));
     }
 
@@ -91,9 +89,8 @@ class Booker
     {
         $queryBuilder->leftJoin($join['field'], $join['alias'])
             ->where('b.start >= :date AND b.end <= :date')
-            ->andWhere('b.storno = :null')
+            ->andWhere('b.storno is NULL')
             ->setParameter('date', $date)
-            ->setParameter('null', null)
         ;
     }
 
@@ -131,14 +128,13 @@ class Booker
             ->orWhere('b.start >= :start AND b.end <= :end')
             ->orWhere('b.start >= :start AND b.end >= :end AND b.start <= :end')
             ->orWhere('b.start <= :start AND b.end <= :end AND b.end >= :start')
-            ->andWhere('b.storno = :null')
+            ->andWhere('b.storno is NULL')
             ->andWhere('b.item = :item')
             ->setParameters(
                 array(
                     'start' => $start,
                     'end' => $end,
                     'item' => $item,
-                    'null' => null
                 )
             );
 
