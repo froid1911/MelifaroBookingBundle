@@ -35,35 +35,6 @@ class Booker
 
     /**
      * @param $item
-     * @param  \DateTime $start
-     * @param  \DateTime $end
-     * @return bool
-     */
-    public function isAvailableForPeriod($item, \DateTime $start, \DateTime $end)
-    {
-
-        $qb = $this->repository->createQueryBuilder('b');
-        $query = $qb->select('b.id')
-            ->where('b.start <= :start AND b.end >= :end')
-            ->orWhere('b.start >= :start AND b.end <= :end')
-            ->orWhere('b.start >= :start AND b.end >= :end AND b.start <= :end')
-            ->orWhere('b.start <= :start AND b.end <= :end AND b.end >= :start')
-
-            ->andWhere('b.item = :item')
-            ->setParameters(array(
-                'start'=> $start,
-                'end'  => $end,
-                'item' => $item
-            ))
-            ;
-
-        $results = $query->getQuery()->getResult();
-
-        return count($results) === 0;
-    }
-
-    /**
-     * @param $item
      * @param  \DateTime $date
      * @return bool
      */
@@ -73,6 +44,7 @@ class Booker
         $results = $qb->select('b.id')
             ->where('b.start <= :date AND b.end >= :date')
             ->andWhere('b.item = :item')
+            ->andWhere('b.storno = NULL')
             ->setParameter('item', $item)
             ->setParameter('date', $date)
             ->getQuery()
@@ -84,35 +56,40 @@ class Booker
     /**
      * @param QueryBuilder $queryBuilder
      * @param $join array(field, alias)
-     * @param \DateTime    $start
-     * @param \DateTime    $end
+     * @param \DateTime $start
+     * @param \DateTime $end
      */
     public function whereAvailableForPeriod(QueryBuilder $queryBuilder, $join, \DateTime $start, \DateTime $end)
     {
         $queryBuilder->leftJoin($join['field'], $join['alias'])
             ->where($join['alias'].'.start >= :start AND '.$join['alias'].'.end <= :end')
             ->orWhere($join['alias'].'.start <= :start AND '.$join['alias'].'.end >= :end')
-            ->orWhere($join['alias'].'.start <= :start AND '.$join['alias'].'.end >= :end AND '.
-                $join['alias'].'.start <= :end')
-            ->orWhere($join['alias'].'.start >= :start AND '.$join['alias'].'.end <= :end AND '.
-                $join['alias'].'.end >= :start')
+            ->orWhere(
+                $join['alias'].'.start <= :start AND '.$join['alias'].'.end >= :end AND '.
+                $join['alias'].'.start <= :end'
+            )
+            ->orWhere(
+                $join['alias'].'.start >= :start AND '.$join['alias'].'.end <= :end AND '.
+                $join['alias'].'.end >= :start'
+            )
+            ->andWhere($join['alias'].'.storno = NULL')
 
             ->setParameters(array(
                 'start'=> $start,
                 'end'  => $end,
-            ))
-        ;
+            ));
     }
 
     /**
      * @param QueryBuilder $queryBuilder
      * @param $join
-     * @param \DateTime    $date
+     * @param \DateTime $date
      */
     public function whereAvailableForDate(QueryBuilder $queryBuilder, $join, \DateTime $date)
     {
         $queryBuilder->leftJoin($join['field'], $join['alias'])
             ->where('b.start >= :date AND b.end <= :date')
+            ->andWhere('b.storno = NULL')
             ->setParameter('date', $date)
         ;
     }
@@ -134,6 +111,36 @@ class Booker
         }
 
         return false;
+    }
+
+    /**
+     * @param $item
+     * @param  \DateTime $start
+     * @param  \DateTime $end
+     * @return bool
+     */
+    public function isAvailableForPeriod($item, \DateTime $start, \DateTime $end)
+    {
+
+        $qb = $this->repository->createQueryBuilder('b');
+        $query = $qb->select('b.id')
+            ->where('b.start <= :start AND b.end >= :end')
+            ->orWhere('b.start >= :start AND b.end <= :end')
+            ->orWhere('b.start >= :start AND b.end >= :end AND b.start <= :end')
+            ->orWhere('b.start <= :start AND b.end <= :end AND b.end >= :start')
+            ->andWhere('b.storno = NULL')
+            ->andWhere('b.item = :item')
+            ->setParameters(
+                array(
+                    'start' => $start,
+                    'end' => $end,
+                    'item' => $item
+                )
+            );
+
+        $results = $query->getQuery()->getResult();
+
+        return count($results) === 0;
     }
 
 }

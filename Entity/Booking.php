@@ -26,6 +26,14 @@ abstract class Booking
      */
     protected $end;
 
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="storno", type="datetime")
+     */
+    protected $storno;
+
     /**
      * Get id
      *
@@ -81,6 +89,24 @@ abstract class Booking
 
         return $this;
     }
+
+    /**
+     * @return \DateTime
+     */
+    public function getStorno()
+    {
+        return $this->storno;
+    }
+
+    /**
+     * @param \DateTime $storno
+     */
+    public function setStorno($storno)
+    {
+        $this->storno = $storno;
+    }
+
+
 
     abstract public function getItem();
 
