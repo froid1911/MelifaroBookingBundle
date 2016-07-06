@@ -119,7 +119,7 @@ class Booker
      * @param  \DateTime $end
      * @return bool
      */
-    public function isAvailableForPeriod($item, \DateTime $start, \DateTime $end, $user = null)
+    public function isAvailableForPeriod($item, \DateTime $start, \DateTime $end, $id = null)
     {
 
         $qb = $this->repository->createQueryBuilder('b');
@@ -138,9 +138,9 @@ class Booker
                 )
             );
 
-        if($user != null) {
-            $query->andWhere('b.user != :user')
-                ->setParameter('user', $user);
+        if($id != null) {
+            $query->andWhere('b.id != :id')
+                ->setParameter('id', $id);
         }
 
         $results = $query->getQuery()->getResult();
